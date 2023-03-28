@@ -1,67 +1,72 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>VAR-CUBE</title>
-    <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
-    
-  </head>
-  <body>
-    <a-scene>
-      
-        
-      <a-entity camera look-controls></a-entity>
 
-      
-      <a-marker preset="hiro">
-        <img id="portalTexture" src="image\portal.jpg">
-        <img id="panoramaTexture" src="image\ponorama.jpg">
-        <a-entity id="portal" geometry="primitive: plane; height: 2; width: 2" material="shader: flat; src: #portalTexture" position="0 1 0" rotation="-90 0 0">
-          
-          <a-sky id="panorama" src="#panoramaTexture"></a-sky>
+<head>
+  <meta charset="utf-8">
+  <title>VAR-CUBE</title>
+  <script
+    src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
 
-          
-          <a-entity id="returnButton" geometry="primitive: plane; height: 0.5; width: 1" material="shader: flat; color: red" position="-0.75 -0.75 0" rotation="-90 0 0" visible="false">
-            <a-text value="Вернуться"  scale="2 2 2"></a-text>
-          </a-entity>
-        </a-entity>
-      </a-marker>
-      <script>
-        
-        //const portal = document.querySelector('#portal');
-        //const returnButton = document.querySelector('#returnButton');
-      
+      const portal = document.querySelector('#portal');
+      const panorama = document.querySelector('#panorama');
+      const returnButton = document.querySelector('#returnButton');
 
-        portal.addEventListener('mouseenter', () => {
-          returnButton.setAttribute('visible', true);
-        });
 
-        portal.addEventListener('mouseleave', () => {
+      portal.addEventListener('mouseenter', () => {
+        returnButton.setAttribute('visible', true);
+      });
+
+      portal.addEventListener('mouseleave', () => {
+        returnButton.setAttribute('visible', false);
+      });
+
+      portal.addEventListener('click', () => {
+        const currentPosition = document.querySelector('[camera]').getAttribute('position');
+        document.querySelector('[camera]').setAttribute('position', '0 1.5 0');
+        panorama.setAttribute('visible', true);
+        portal.setAttribute('visible', false);
+        returnButton.setAttribute('visible', true);
+        returnButton.addEventListener('click', () => {
+          panorama.setAttribute('visible', false);
+          portal.setAttribute('visible', true);
           returnButton.setAttribute('visible', false);
+          document.querySelector('[camera]').setAttribute('position', currentPosition);
         });
-      </script>
+      });
+    })
+  </script>
 
-      
-      <script>
-        const portal = document.querySelector('#portal');
-        const panorama = document.querySelector('#panorama');
-        const returnButton = document.querySelector('#returnButton');
+</head>
 
-        portal.addEventListener('click', () => {
-          const currentPosition = document.querySelector('[camera]').getAttribute('position');
-          document.querySelector('[camera]').setAttribute('position', '0 1.5 0');
-          panorama.setAttribute('visible', true);
-          portal.setAttribute('visible', false);
-          returnButton.setAttribute('visible', true);
-          returnButton.addEventListener('click', () => {
-            panorama.setAttribute('visible', false);
-            portal.setAttribute('visible', true);
-            returnButton.setAttribute('visible', false);
-            document.querySelector('[camera]').setAttribute('position', currentPosition);
-          });
-        });
-      </script>
-    </a-scene>
-  </body>
+<body>
+  <a-scene 
+    embedded 
+    vr-mode-ui="enabled:false;" 
+    arjs="trackingMethod:best; sourceType: webcam"
+    renderer="logarithmicDepthBuffer:true;">
+
+    <a-marker preset="hiro">
+      <img id="portalTexture" src="image\portal.jpg">
+      <img id="panoramaTexture" src="image\ponorama.jpg">
+      <a-entity id="portal" geometry="primitive: plane; height: 2; width: 2"
+        material="shader: flat; src: #portalTexture" position="0 1 0" rotation="-90 0 0">
+
+        <a-sky id="panorama" src="#panoramaTexture"></a-sky>
+
+
+        <a-entity id="returnButton" geometry="primitive: plane; height: 0.5; width: 1"
+          material="shader: flat; color: red" position="-0.75 -0.75 0" rotation="-90 0 0" visible="false">
+          <a-text value="Вернуться" scale="2 2 2"></a-text>
+        </a-entity>
+      </a-entity>
+    </a-marker>
+
+    <a-entity camera look-controls></a-entity>
+
+  </a-scene>
+</body>
+
 </html>
